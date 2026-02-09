@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Встроенный светодиод Arduino</title>
+  <style>
+    :root {
+      --bg: #f5f7fa;
+      --text: #333333;
+      --accent: #4a90e2;
+      --muted: #666666;
+      --radius: 12px;
+      --max-width: 800px;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 3rem 1rem;
+    }
+    .wrapper {
+      max-width: var(--max-width);
+      margin: 0 auto;
+    }
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+      color: var(--accent);
+    }
+    h2 {
+      font-size: 1.5rem;
+      margin: 2rem 0 0.75rem;
+      color: var(--accent);
+    }
+    p {
+      margin-bottom: 1rem;
+    }
+    ol {
+      padding-left: 1.5rem;
+    }
+	ul {
+      padding-left: 1.5rem;
+    }
+    li {
+      margin-bottom: 0.5rem;
+	}
+	code {
+	  font-size: 1rem;
+	}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <h1>Управляем встроенным светодиодом</h1>
+
+    <h2>Принцип</h2>
+    <p>Встроенный в Arduino UNO светодиод подключён к контакту (пину) 13 платы. Чтобы зажечь его, надо на указанном пине установить высокий уровень, чтобы погасить &mdash; низкий.</p>
+	<p>Состоянием пина 13 управляет бит 5 (счёт от нуля) в регистре данных порта B Arduino, и нужно лишь задать этому биту требуемое значение 0 или 1. Однако невозможно задать значение только одному биту этого регистра: записать или считать можно только целиком весь регистр, байт (у него есть собственное имя <code>PORTB</code>). Другие пины порта могут выполнять какую-то свою функцию, поэтому менять бит 5 надо так, чтобы не затронуть другие биты:</p>
+	<ul>
+	  <li>считать <code>PORTB</code> в байтовую переменную;</li>
+	  <li>задать биту 5 нужное состояние;</li>
+	  <li>записать полученный байт в <code>PORTB</code>.</li>
+	</ul>
+	<p>Но перед этим надо настроить пин 13 на работу в режиме выхода.</p>
+
+    <h2>Реализация</h2>
+    
+	<p>Предусмотрена маска пятого бита &mdash; байт, в котором бит 5 равен 1, а остальные биты равны 0:</p>
+	<p>	<code>mask = 0b00100000</code>.</p>
+	<p>Считать <code>PORTB</code>, установить биту 5 значение 1 (коротко: "установить бит 5"), не затрагивая другие биты, записать результат в порт B можно одним оператором:
+	<p><code>PORTB = PORTB | mask;</code></p>
+	<p>или, в сокращённой записи</p>
+	<p><code>PORTB |= mask;</code></p>
+	<p>Считать <code>PORTB</code>, установить биту 5 значение 0 (коротко: "сбросить бит 5"), не затрагивая другие биты, записать результат в порт B можно, аналогично, одним оператором: </p>
+	<p><code>PORTB &= ~mask;</code></p>
+	<p>Эта же маска применяется к регистру направления DDRB для переключения пина 5 в режим выхода:</p>
+	<p><code>DDRB |= mask;</code></p>	
+	<p>Нужное значение бита 5 &mdash; 0 или 1 &mdash; вводят с клавиатуры компьютера в мониторе последовательного порта Arduino IDE. Программа проверяет, какой символ был принят, и, если это '0' или '1', выполняет рассмотренный выше оператор с маской, которым, соответственно, сбрасывается или устанавливается бит&nbsp;5.</p>
+
+    <h2>Файлы</h2>
+	<p>Текст программы содержится в файле <code>Ind_y_Ardu.ino</code>, который можно получить с Github <A href="https://github.com/x40in/Ind-y-Ardu/raw/LED_builtin/Ind_y_Ardu.ino">по ссылке</A>.</p>
+	<p>Как вариант, можно получить с Github весь <A href="https://github.com/x40in/Ind-y-Ardu">репозиторий цикла "Ардуино и индикаторы"</A> и выполнить команду</p>
+	<p><code>git restore -s LED_builtin -- Ind_y_Ardu.ino</code></p>
+	<p>Файл <code>Ind_y_Ardu.ino</code> в рабочей области будет перезаписан версией для управления встроенным светодиодом Arduino.</p>
+
+    <h2>Источники</h2>
+    <ol>
+	  <li>Alex Gyver. Битовые операции. <A href="https://alexgyver.ru/lessons/bitmath/">https://alexgyver.ru/lessons/bitmath/</A></li>
+	  <li>Arduino - Port Manipulation. <A href="https://docs.arduino.cc/retired/hacking/software/PortManipulation/">https://docs.arduino.cc/retired/hack..</A></li>
+	  <li>LED Interfacing With Arduino UNO With Port Registers. <A href="https://www.instructables.com/LED-Interfacing-With-Arduino-UNO-With-Port-Registe/">https://www.instructables.com/LED-...</A></li>
+	  <li>Alex Gyver. Монитор порта. Serial. <A href="https://alexgyver.ru/lessons/serial/">https://alexgyver.ru/lessons/serial/</A></li>
+      <li>Serial.Read с примером использования. <A href="https://arduino.ru/Reference/Serial/Read">https://arduino.ru/Reference/Serial/Read</A></li>
+	  
+    </ol>
+  </div>
+</body>
+</html>
