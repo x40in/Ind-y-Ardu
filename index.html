@@ -1,7 +1,14 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
+<meta charset="UTF-8">
+
+<link rel="icon" type="image/png" href="/pages/favicon/favicon-96x96.png" sizes="96x96" />
+<link rel="icon" type="image/svg+xml" href="/pages/favicon/favicon.svg" />
+<link rel="shortcut icon" href="/pages/favicon/favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="/pages/favicon/apple-touch-icon.png" />
+<link rel="manifest" href="/pages/favicon/site.webmanifest" />
+  
   <title>Ардуино и индикаторы</title>
   <style>
     :root {
@@ -71,23 +78,27 @@
     p {
       color: var(--muted);
     }
+	code {
+	  font-size: 1rem;
+	}
   </style>
 </head>
 <body>
   <div class="wrapper">
     <h1>Ардуино и индикаторы</h1>
     <p class="subtitle">Цикл программ (скетчей) для Ардуино, в которых последовательно, начиная с самых простых конфигураций, иллюстрируется работа с индикаторами (светодиодами, лампочками, матрицами и др.). Цикл начинается с управляемого зажигания и гашения встроенного светодиода Ардуино, далее рассматриваются дискретные внешние светодиоды, одно- и многоразрядные светодиодные индикаторы, матрицы, системы с несколькими индикаторами и многое другое. Используется плата Arduino UNO, подключённая к компьютеру через USB. Команды для управления индикаторами вводятся в командной строке, роль которой играет монитор последовательного порта в Arduino IDE.</p>
+	<p>В программах не используются функции <code>delay</code>, <code>digitalRead</code>, <code>digitalWrite</code> и т.п. В программах используются указатели, прерывания, регистры.</p>
 
-    <h2>1. Отдельные светодиоды</h2>
-    <ul>
-      <li><a class="card" href="https://x40in.github.io/Ind-y-Ardu/pages/010_Built-in.html">
-        <h3>Встроенный светодиод Ардуино</h3>
-        <p>Включаем и выключаем встроенный светодиод.</p>
-      </a></li>
- <!--     <li><a class="card" href="https://x40in.github.io/ARD-IND-000-html/underconstruction.html">
-        <h3>Дискретные внешние светодиоды</h3>
-        <p>Включаем и выключаем внешние светодиоды.</p>
-      </a></li> -->
+	<h2>1. Отдельные светодиоды</h2>
+	<ul>
+	  <li><a class="card" href="https://x40in.github.io/Ind-y-Ardu/pages/010_Built-in.html">
+		<h3>Встроенный светодиод Ардуино</h3>
+		<p>Включаем и выключаем встроенный светодиод.</p></a></li>
+ 
+	  <li><a class="card" href="https://x40in.github.io/Ind-y-Ardu/pages/020_External_LEDs.html">
+		<h3>Внешние светодиоды</h3>
+		<p>Включаем и выключаем несколько светодиодов.</p></a></li>
+		
     </ul>
 
     <!--
@@ -111,7 +122,7 @@
 	<ul>
       <li><a class="card" href="https://github.com/x40in/Ind-y-Ardu">
         <h3>Весь цикл программ</h3>
-        <p>Репозиторий на Github.</p>
+        <p>Репозиторий на Github. Все программы содержатся в одном репозитории. Получить конкретную программу можно, обратившись к соответствующему коммиту по его тегу (как &mdash; написано на индивидуальных страницах программ, на которые ссылается вышеприведённое оглавление).</p>
       </a></li>
     </ul>
 	
