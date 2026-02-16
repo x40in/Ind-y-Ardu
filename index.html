@@ -2,12 +2,15 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-
+<!--
 <link rel="icon" type="image/png" href="/pages/favicon/favicon-96x96.png" sizes="96x96" />
 <link rel="icon" type="image/svg+xml" href="/pages/favicon/favicon.svg" />
 <link rel="shortcut icon" href="/pages/favicon/favicon.ico" />
 <link rel="apple-touch-icon" sizes="180x180" href="/pages/favicon/apple-touch-icon.png" />
-<link rel="manifest" href="/pages/favicon/site.webmanifest" />
+<link rel="manifest" href="/pages/favicon/site.webmanifest" /> -->
+
+<link rel="shortcut icon" href="favicon.ico" />
+
   
   <title>Ардуино и индикаторы</title>
   <style>
@@ -87,7 +90,7 @@
   <div class="wrapper">
     <h1>Ардуино и индикаторы</h1>
     <p class="subtitle">Цикл программ (скетчей) для Ардуино, в которых последовательно, начиная с самых простых конфигураций, иллюстрируется работа с индикаторами (светодиодами, лампочками, матрицами и др.). Цикл начинается с управляемого зажигания и гашения встроенного светодиода Ардуино, далее рассматриваются дискретные внешние светодиоды, одно- и многоразрядные светодиодные индикаторы, матрицы, системы с несколькими индикаторами и многое другое. Используется плата Arduino UNO, подключённая к компьютеру через USB. Команды для управления индикаторами вводятся в командной строке, роль которой играет монитор последовательного порта в Arduino IDE.</p>
-	<p>В программах не используются функции <code>delay</code>, <code>digitalRead</code>, <code>digitalWrite</code> и т.п. В программах используются указатели, прерывания, регистры.</p>
+	<p>В программах не используются функции <code>delay</code>, <code>digitalRead</code>, <code>digitalWrite</code> и т.п. В программах используются обращения к регистрам, указатели, прерывания.</p>
 
 	<h2>1. Отдельные светодиоды</h2>
 	<ul>
@@ -110,7 +113,7 @@
       </a></li>
 	  <li><a class="card" href="https://x40in.github.io/Ind-y-Ardu/pages/040_7seg2.html">
         <h3>Индикатор с общим катодом &mdash; 2</h3>
-        <p>Зажигаем цифры и знаки.</p>
+        <p>Зажигаем цифры и знаки из командной строки.</p>
       </a></li>
       <li><a class="card" href="https://x40in.github.io/Ind-y-Ardu/pages/050_7seg3.html">
         <h3>Неважно, какой электрод общий</h3>
