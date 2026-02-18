@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+
+<link rel="icon" type="image/png" href="favicon/favicon-96x96.png" sizes="96x96" />
+<link rel="icon" type="image/svg+xml" href="favicon/favicon.svg" />
+<link rel="shortcut icon" href="favicon/favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png" />
+<link rel="manifest" href="favicon/site.webmanifest" />
+
+  <title>Общий электрод &mdash; любой</title>
+  <style>
+    :root {
+      --bg: #f5f7fa;
+      --text: #333333;
+      --accent: #4a90e2;
+      --muted: #666666;
+      --radius: 12px;
+      --max-width: 800px;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 3rem 1rem;
+    }
+    .wrapper {
+      max-width: var(--max-width);
+      margin: 0 auto;
+    }
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+      color: var(--accent);
+    }
+    h2 {
+      font-size: 1.5rem;
+      margin: 2rem 0 0.75rem;
+      color: var(--accent);
+    }
+    p {
+      margin-bottom: 1rem;
+    }
+    ol {
+      padding-left: 1.5rem;
+    }
+	ul {
+      padding-left: 1.5rem;
+    }
+    li {
+      margin-bottom: 0.5rem;
+	}
+	code {
+	  font-size: 1rem;
+	}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <h1>Неважно, какой электрод у индикатора общий &mdash; программа одна</h1>
+	
+	<p>Семисегментные индикаторы с общим катодом и общим анодом подключаются и управляются <i>с точностью до наоборот</i>. Это <i>наоборот</i> при переходе от одного типа индикатора к другому требует изменений аппаратной части, особенно существенных, если индикатор подключён к Arduino не напрямую, а через ключи. В то же время в программе, заранее подготовленной к такому переходу, достаточно изменить значение одной константы. Здесь представлена такая программа.</p>
+
+    <h2>Принцип</h2>
+    
+	<p>Когда у индикатора общий катод, его подключают к GND, а на аноды подают через резисторы положительный потенциал. Если же у индикатора общий анод, то ситуация обратная: анод подключают к положительному потенциалу (+5 В), а сегменты через резисторы к GND. От Arduino требуется выдать на сегменты нужный потенциал. Например, чтобы зажечь цифру 7 на индикаторе с общим катодом, надо выдать высокий потенциал на сегменты A, B и C и низкий потенциал на остальные сегменты. Чтобы зажечь ту же цифру на индикаторе с общим анодом, надо выдать низкий потенциал на указанные три сегмента и высокий на остальные. Иными словами, байт, которым указываются горящие сегменты (схема отображения), в случае общего анода следует выдавать в порты инвертированным.</p>
+
+    <h2>Реализация</h2>
+	
+    <p>Программа представляет собой развитие предыдущего проекта <A HREF=https://x40in.github.io/Ind-y-Ardu/pages/040_7seg2.html>"Зажигаем цифры и знаки"</A>. В ней так же реализованы разбор командной строки и преобразование строки единиц и нулей в байт (в схему отображения произвольного знака). По умолчанию включён режим отображения с декодированием, так что сразу можно ввести команду <I>v=0</I> и увидеть нуль на индикаторе. После смены режима командой <I>m=1</I> можно вводить комбинации сегментов, выраженные двоичным числом. Логика работы программы зависит от того, какой электрод индикатора объявлен в программе общим. Изменение электрода меняет способ гашения (очистки) индикатора и способ вывода знака. Тип индикатора должен быть задан до компиляции программы: </p>
+	<p><code>COMMON_CATHODE false   // true для индикатора с общим катодом, false для индикатора с общим анодом</code></p>
+	
+	<h2>Электрическая схема</h2>
+	<p><img src="img/050_7seg3.jpg" align="center"></p>
+
+    <h2>Файлы</h2>
+	<p>Текст программы содержится в файле <code>Ind_y_Ardu.ino</code>, который можно получить с Github <A href="https://github.com/x40in/Ind-y-Ardu/raw/7seg03/Ind_y_Ardu.ino"> по ссылке</A>.</p>
+	<p>Как вариант, можно получить с Github весь <A href="https://github.com/x40in/Ind-y-Ardu">репозиторий цикла "Ардуино и индикаторы"</A> и выполнить команду</p>
+	<p><code>git restore -s 7seg03 -- Ind_y_Ardu.ino</code></p>
+	<p>Файл <code>Ind_y_Ardu.ino</code> в рабочей области будет перезаписан требуемой версией.</p>
+
+    <!--
+	<h2>Источники</h2>
+    <ol>
+	  <li>Alex Gyver. Битовые операции. <A href="https://alexgyver.ru/lessons/bitmath/">https://alexgyver.ru/lessons/bitmath/</A></li>
+    </ol> -->
+  </div>
+</body>
+</html>
