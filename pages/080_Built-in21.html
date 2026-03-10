@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+
+<link rel="icon" type="image/png" href="favicon/favicon-96x96.png" sizes="96x96" />
+<link rel="icon" type="image/svg+xml" href="favicon/favicon.svg" />
+<link rel="shortcut icon" href="favicon/favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png" />
+<link rel="manifest" href="favicon/site.webmanifest" />
+
+  <title>Hello World!</title>
+  <style>
+    :root {
+      --bg: #f5f7fa;
+      --text: #333333;
+      --accent: #4a90e2;
+      --muted: #666666;
+      --radius: 12px;
+      --max-width: 800px;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 3rem 1rem;
+    }
+    .wrapper {
+      max-width: var(--max-width);
+      margin: 0 auto;
+    }
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+      color: var(--accent);
+    }
+    h2 {
+      font-size: 1.5rem;
+      margin: 2rem 0 0.75rem;
+      color: var(--accent);
+    }
+    p {
+      margin-bottom: 1rem;
+    }
+    ol {
+      padding-left: 1.5rem;
+    }
+	ul {
+      padding-left: 1.5rem;
+    }
+    li {
+      margin-bottom: 0.5rem;
+	}
+	code {
+	  font-size: 1rem;
+	}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <h1>Hello World!</h1>
+
+    <p>Научившись в <A href="010_Built-in.html">самом первом этюде</A> включать и выключать встроенный светодиод, мы сразу перешли к группам и системам светодиодов, не сделав одно важное дело: нужно было послать традиционный привет миру. В &laquo;обычном&raquo; программировании этот привет имеет буквальный смысл &mdash; напечатать фразу <i>Hello World!</i>. Для Arduino же таким приветом традиционно служит мигание встроенным светодиодом.</p>
+    <p>Мигать светодиодом просто: нужно его зажечь, выждать некоторое время, погасить, выждать, и далее повторять всё это в цикле. Основной вопрос заключается в реализации шага <i>выждать</i>. Проще всего использовать функцию <code>delay()</code>, однако не всё, что просто, правильно и полезно, и использования этой функции мы избегаем. Функция <code>millis()</code>, которая фигурировала в <A href="070_2dig2.html">этюде о динамической индикации</A>, лучше, но гораздо полезнее научиться работать со встроенным таймером Arduino. Изучение основ работы с ними на примере мигания светодиодом будет темой этого и ещё нескольких этюдов, а дальше сделаем на встроенном таймере динамическую индикацию и счёт времени.</p>
+
+	
+	<h2>Принцип</h2>
+	<p>Таймером в микропроцессорной технике называют аппаратный счётчик, работающий независимо от выполнения основной программы. Таймер может использоваться для отсчёта временных интервалов, подсчёта числа событий, формирования задержек, генерации звука и для многого другого.</p>
+    <p>В Arduino UNO три таймера: 16-разрядный <i>Таймер 1</i> и два восьмиразрядных с номерами 0 и 2.</p>
+    <p>На чертеже показана упрощённая модель <i>Таймера 1</i>. Внутренний тактовый сигнал 16&nbsp;МГц поступает на вход делителя частоты, коэффициент деления которого задаётся тремя младшими битами регистра TCCR1B. Выходной сигнал делителя поступает на вход 16-разрядного счётчика. Счётчик считает поступившие на его вход импульсы, и каждый раз, когда досчитывает до 65535 и переполняется, (1) сбрасывается; и (2) генерирует прерывание по переполнению, если это разрешено битом TOIE1 в регистре TIMSK1. Получив запрос прерывания, микроконтроллер выполняет программу обслуживания прерывания (Interrupt Service Routine) <code>ISR(TIMER1_OVF_VECT)</code>, в которую помещают код управления светодиодом.</p>
+
+    <p align="center"><IMG src="img/080_Builtin21.jpg"></p>
+
+
+    <h2>Задача</h2>
+	<p>Мигать встроенным светодиодом по прерыванию от <i>Таймера 1</i>, с возможностью выбора частоты мигания из нескольких фиксированных значений.</p>
+
+    <h2>Реализация</h2>
+	
+    <p>Частота <i>f</i><sub>int</sub> прерываний в данной конфигурации 16&nbsp;МГц&nbsp;/&nbsp;2<sup>16</sup>&nbsp;/&nbsp;коэффициент <i>k</i> деления. Если выбрать <i>k</i>=256, то <i>f</i><sub>int</sub> будет близка к 1 Гц: </p>
+    <p align="center"><IMG src="img/080_Eq1.gif"></p>
+    <p>В программе этот коэффициент деления задан в качестве начального и предусмотрена возможность установки требуемого коэффициента деления в команде <i>d=значение</i> (например, для установки коэффициента деления 1024 и, соответственно, частоты прерываний около 1/4&nbsp;Гц надо будет передать команду d=101).</p>
+    <p>Программа обслуживания прерывания при каждом вызове считывает бит 5 из <code>PORTB</code> и записывает обратно его инвертированное значение. При каждом прерывании светодиод либо зажигается, либо гаснет, и результирующая частота мигания вдвое ниже частоты прерываний. Таким образом, в рассмотренной конфигурации набор возможных частот мигания следующий: 128&nbsp;Гц, 16&nbsp;Гц, 2&nbsp;Гц, 1/2&nbsp;Гц, 1/8&nbsp;Гц  (значения приблизительные).</p>
+
+    <h2>Файлы</h2>
+	<p>Текст программы содержится в файле <code>Ind_y_Ardu.ino</code>, который можно получить с Github <A href="https://github.com/x40in/Ind-y-Ardu/raw/builtin21/Ind_y_Ardu.ino"> по ссылке</A>.</p>
+	<p>Как вариант, можно получить с Github весь <A href="https://github.com/x40in/Ind-y-Ardu">репозиторий цикла "Ардуино и индикаторы"</A> и выполнить команду</p>
+	<p><code>git restore -s builtin21 -- Ind_y_Ardu.ino</code></p>
+	<p>Файл <code>Ind_y_Ardu.ino</code> в рабочей области будет перезаписан требуемой версией.</p>
+
+    <h2>Источники</h2>
+    <ol>
+	  <li>ATmega328P datasheet. <A href="https://www.microchip.com/en-us/product/atmega328p#Documentation">https://www.microchip.com/en-us/product/atmega328p#Documentation</A></li>
+	  <li>Timer interrupts. <A href="https://arduinodiy.wordpress.com/2012/02/28/timer-interrupts/">https://arduinodiy.wordpress.com/2012/02/28/timer-interrupts/</A></li>
+	  <li>Could someone explain this weird looking code? <A href="https://arduino.stackexchange.com/questions/414/could-someone-explain-this-weird-looking-code-used-to-setup-timers">https://arduino.stackexchange.com/questions...</A></li>
+    </ol>
+
+    <p>&nbsp;</p>
+    
+    <p><A href="../index.html">К оглавлению</A></p>
+
+  </div>
+</body>
+</html>

@@ -83,7 +83,7 @@
     <h2>Результаты и наблюдения</h2>
     <p><img src="img/070_device.jpg"></p>
     <p><img src="img/070_wave.jpg"></p>
-    <p>Показаны осциллограммы напряжений на катодах двухразрядного индикатора при <i>t</i>=10 мс. Легко видеть, что эти напряжения противофазны: когда на одном разряде низкий уровень, что соответствует свечению, на втором высокий &mdash; разряд погашен.</p>
+    <p>Показаны осциллограммы напряжений на катодах двухразрядного индикатора при <i>t</i>=10 мс (Масштаб 5 мс/дел, 2 В/дел). Легко видеть, что эти напряжения противофазны: когда на одном разряде низкий уровень, что соответствует свечению, на втором высокий &mdash; разряд погашен.</p>
     <p>На осциллограмме этого не видно, но наблюдение за живым сигналом показывает нестабильность длительности включённого состояния и периода прямоугольного сигнала. Последний скачками меняется приблизительно на 0,25 мс. Это может быть связано с отмеченными <A href="https://alexgyver.ru/lessons/time/">здесь</A> особенностями реализации функции millis().</p>
     <p>По наблюдению автора, переход от восприятия изображения на индикаторе как двух попеременно загорающихся отдельных цифр к восприятию их как одного мерцающего двухразрядного числа происходит при снижении <i>t</i> до 70-60 мс, а при <i>t</i>=14-12 мс исчезает и мерцание.</p>
 
@@ -94,7 +94,17 @@
 	<p><code>git restore -s 2dig02 -- Ind_y_Ardu.ino</code></p>
 	<p>Файл <code>Ind_y_Ardu.ino</code> в рабочей области будет перезаписан требуемой версией.</p>
 
+    <h2>Дополнительная информация</h2>
+    <ol>
+	  <li>Динамическая индикация. <A href="https://3d-diy.ru/blog/dinamicheskaya-indikatsiya/">https://3d-diy.ru/blog/dinamicheskaya-indikatsiya/</A></li>
+	  <li>STM32 и семисегментный индикатор. Динамическая индикация. <A href="https://microtechnics.ru/stm32-i-semisegmentnyj-indikator-dinamicheskaya-indikacziya/">https://microtechnics.ru/stm32-i-semisegmentnyj-indikator-dinamicheskaya-indikacziya/</A></li>
+	  <li>AVR. Динамическая индикация. <A href="https://www.customelectronics.ru/avr-dinamicheskaya-indikatsiya/">https://www.customelectronics.ru/avr-dinamicheskaya-indikatsiya/</A></li>
+	  <li>Ю.Ревич. Управление светодиодными индикаторами с помощью регистров сдвига с токовым выходом. <A href="https://habr.com/ru/articles/591945/">https://habr.com/ru/articles/591945/</A></li>
+      <li>Секрет динамической индикации. <A href="https://leoniv.livejournal.com/195409.html">https://leoniv.livejournal.com/195409.html</A></li>
+    </ol>
+
     <p>&nbsp;</p>
+    
     <p><A href="../index.html">К оглавлению</A></p>
 
   </div>
