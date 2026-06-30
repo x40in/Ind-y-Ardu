@@ -35,6 +35,9 @@
     p {
       margin-bottom: 1rem;
     }
+    p.center {
+      text-align: center;
+    }
     ol {
       padding-left: 1.5rem;
     }
